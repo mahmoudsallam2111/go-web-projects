@@ -10,7 +10,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// 👇 Pass the instantiated handlers into the router
 func SetupRouter(productHandler *product.Handler, categoryHandler *category.Handler) *gin.Engine {
 	router := gin.Default()
 

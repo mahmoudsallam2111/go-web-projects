@@ -2,6 +2,7 @@ package product
 
 import (
 	"net/http"
+	"product-api/internal/product/dtos"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,7 +62,7 @@ func (h *Handler) GetProducts(c *gin.Context) {
 // @Description Fetches a single product by its ID
 // @Produce json
 // @Param id path string true "Product ID"
-// @Success 200 {object} domain.Product
+// @Success 200 {object} ProductResponse
 // @Router /products/{id} [get]
 func (h *Handler) GetProductByID(c *gin.Context) {
 	id := c.Param("id")
@@ -71,7 +72,19 @@ func (h *Handler) GetProductByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
 		return
 	}
-	c.JSON(http.StatusOK, product)
+	response := dtos.ProductResponse{
+		ID:          product.ID, // gorm.Model provides the ID
+		Name:        product.Name,
+		Description: product.Description,
+		Price:       product.Price,
+		Stock:       product.Stock,
+	}
+
+	if product.Category != nil {
+		response.CategoryName = &product.Category.Name
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 type UpdateProductRequest struct {

@@ -1,8 +1,9 @@
 package category
 
 import (
-	"gorm.io/gorm"
 	"product-api/internal/domain"
+
+	"gorm.io/gorm"
 )
 
 type Repository interface {
@@ -27,7 +28,7 @@ func (r *repository) Create(category *domain.Category) error {
 
 func (r *repository) GetAll() ([]domain.Category, error) {
 	var categories []domain.Category
-	err := r.db.Preload("Products").Find(&categories).Error
+	err := r.db.Find(&categories).Error
 	return categories, err
 }
 
